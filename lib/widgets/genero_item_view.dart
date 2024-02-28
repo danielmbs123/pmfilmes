@@ -13,14 +13,23 @@ class GeneroItemView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final vm = Provider.of<GeneroViewModel>(context);
+
     return Container(
       padding: const EdgeInsets.all(4),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(genero.nome),
           IconButton(
             onPressed: () => click(context),
-            icon: const Icon(Icons.arrow_right),
+            icon: Icon(
+              Icons.task_alt,
+              color:
+                  vm.jaSelecionouGenero && vm.generoSelecionado.id == genero.id
+                      ? Colors.green
+                      : Colors.black,
+            ),
           ),
         ],
       ),

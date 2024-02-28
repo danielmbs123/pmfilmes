@@ -3,9 +3,12 @@ import 'package:pmfilmes/dominio/genero.dart';
 
 class GeneroViewModel extends ChangeNotifier {
   final List<Genero> generos;
-  late Genero _genero;
 
-    GeneroViewModel({
+  //Genero? significa que a variavel espera receber um objeto do tipo Genero
+  //mas tb aceita que o valor fique nulo
+  Genero? _genero;
+
+  GeneroViewModel({
     required this.generos,
   });
 
@@ -14,5 +17,9 @@ class GeneroViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Genero get generoSelecionado => _genero;
+  bool get jaSelecionouGenero => _genero != null;
+
+  //genero! força a plataforma a aceitar que a variavel esta preenchida
+  //tipo: Confia que vai ter valor!
+  Genero get generoSelecionado => _genero!;
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pmfilmes/page/filter_page.dart';
 import 'package:pmfilmes/page/genero_page.dart';
 import 'package:pmfilmes/repositorio/genero_repositorio.dart';
 import 'package:pmfilmes/vm/genero_view_model.dart';
@@ -58,6 +59,15 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
+        actions: [
+          IconButton(
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const FilterPage()),
+            ),
+            icon: const Icon(Icons.tune),
+          ),
+        ],
       ),
       body: Center(
         child: Column(
