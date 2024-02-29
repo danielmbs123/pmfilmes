@@ -19,7 +19,38 @@ class FilterItem extends StatelessWidget {
       height: 200,
       child: Card(
         elevation: 5,
-        child: Column(),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      title,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+                IconButton(
+                  onPressed: onPressed,
+                  icon: const Icon(
+                    Icons.edit,
+                    size: 18,
+                  ),
+                ),
+              ],
+            ),
+            Expanded(
+              child: Center(
+                child: Text(
+                  value,
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
