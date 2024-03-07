@@ -8,4 +8,15 @@ class Ator {
     required this.nome,
     required this.nacionalidade,
   });
+
+  bool get isEmpty => id.isEmpty;
+  bool get isNotEmpty => !isEmpty;
+
+  static Ator empty() {
+    return Ator(
+      id: "",
+      nome: "",
+      nacionalidade: "",
+    );
+  }
 }

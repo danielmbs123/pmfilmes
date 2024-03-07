@@ -14,9 +14,10 @@ class FilterItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 200,
-      height: 200,
+    return Container(
+      width: 150,
+      height: 150,
+      margin: const EdgeInsets.all(4),
       child: Card(
         elevation: 5,
         child: Column(
@@ -46,6 +47,7 @@ class FilterItem extends StatelessWidget {
                 child: Text(
                   value,
                   style: Theme.of(context).textTheme.headlineMedium,
+                  textAlign: TextAlign.center,
                 ),
               ),
             ),

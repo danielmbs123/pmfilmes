@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pmfilmes/page/filter_page.dart';
 import 'package:pmfilmes/page/genero_page.dart';
+import 'package:pmfilmes/repositorio/ator_repositorio.dart';
 import 'package:pmfilmes/repositorio/genero_repositorio.dart';
+import 'package:pmfilmes/vm/ator_view_model.dart';
 import 'package:pmfilmes/vm/genero_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -21,11 +23,16 @@ class MyApp extends StatelessWidget {
             generos: GeneroRepositorio.list(),
           ),
         ),
+        ChangeNotifierProvider(
+          create: (_) => AtorViewModel(
+            atores: AtorRepositorio.list(),
+          ),
+        ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
           useMaterial3: true,
         ),
         home: const MyHomePage(title: 'Flutter Demo Home Page'),
