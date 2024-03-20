@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -8,6 +9,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  var loading = false;
+
   final emailController = TextEditingController(text: "");
   final senhaController = TextEditingController(text: "");
 
@@ -45,9 +48,31 @@ class _LoginPageState extends State<LoginPage> {
               Container(
                 width: double.maxFinite,
                 margin: const EdgeInsets.only(top: 20, bottom: 10),
-                child: ElevatedButton(
-                  onPressed: () {},
-                  child: const Text("Entrar"),
+                child: Builder(
+                  builder: (context) {
+                    if (loading) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+
+                    return ElevatedButton(
+                      onPressed: () {
+                        login().then(
+                          (value) {
+                            setState(() {
+                              loading = false;
+                            });
+
+                            return ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(value)),
+                            );
+                          },
+                        );
+                      },
+                      child: const Text("Entrar"),
+                    );
+                  },
                 ),
               ),
               Row(
@@ -71,6 +96,34 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<String> login() async {
+    setState(() {
+      loading = true;
+    });
+
+    return Future.delayed(
+      const Duration(milliseconds: 100),
+      () async {
+        var message = "";
+
+        try {
+          final credential =
+              await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: emailController.text,
+            password: senhaController.text,
+          );
+
+          message =
+              "Seja bem vindo, ${credential.user?.displayName ?? "Usuário"}";
+        } on FirebaseAuthException catch (e) {
+          message = 'não foi possível completar o login';
+        }
+
+        return message;
+      },
     );
   }
 }
