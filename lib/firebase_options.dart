@@ -70,6 +70,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '846424604993',
     projectId: 'pmfilmes-6e6c2',
     storageBucket: 'pmfilmes-6e6c2.appspot.com',
+    iosClientId: '846424604993-qlq9hrakoh78gmtd9bafhkl5dnftk8kh.apps.googleusercontent.com',
     iosBundleId: 'com.example.pmfilmes',
   );
 }
