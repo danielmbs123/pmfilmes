@@ -7,6 +7,7 @@ import 'package:pmfilmes/page/login_page.dart';
 import 'package:pmfilmes/repositorio/ator_repositorio.dart';
 import 'package:pmfilmes/repositorio/genero_repositorio.dart';
 import 'package:pmfilmes/vm/ator_view_model.dart';
+import 'package:pmfilmes/vm/auth_view_model.dart';
 import 'package:pmfilmes/vm/genero_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -27,6 +28,7 @@ class Aplicacao extends StatelessWidget {
             atores: AtorRepositorio.list(),
           ),
         ),
+        ChangeNotifierProvider(create: (_) => AuthViewModel()),
       ],
       child: MaterialApp(
         title: "PMFilmes",

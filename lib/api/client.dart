@@ -13,3 +13,15 @@ abstract class ApiClient {
   @POST(Apis.autenticar)
   Future<Credencial> autenticar(@Body() AutenticarRequest request);
 }
+
+ApiClient buildClient() {
+  final dio = Dio();
+
+  dio.interceptors.addAll(
+    [
+      PrettyDio
+    ]
+  );
+
+  return ApiClient(dio);
+}

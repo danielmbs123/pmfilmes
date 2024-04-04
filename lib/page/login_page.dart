@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:pmfilmes/vm/auth_view_model.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -17,6 +19,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final vm = Provider.of<AuthViewModel>(context);
+
     return Scaffold(
       body: Center(
         child: SizedBox(
@@ -49,47 +53,13 @@ class _LoginPageState extends State<LoginPage> {
               Container(
                 width: double.maxFinite,
                 margin: const EdgeInsets.only(top: 20, bottom: 10),
-                child: Builder(
-                  builder: (context) {
-                    if (loading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-
-                    return ElevatedButton(
-                      onPressed: () {
-                        login().then(
-                          (value) {
-                            setState(() {
-                              loading = false;
-                            });
-
-                            return ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(value)),
-                            );
-                          },
-                        );
-                      },
-                      child: const Text("Entrar"),
-                    );
-                  },
-                ),
-              ),
-              Container(
-                width: double.maxFinite,
-                margin: const EdgeInsets.only(top: 10, bottom: 10),
                 child: ElevatedButton(
-                  onPressed: () => signInWithGoogle().then(
-                    (value) => ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          "Seja bem vindo, ${value.user?.displayName ?? ""}!",
-                        ),
-                      ),
-                    ),
+                  onPressed: () => login(
+                    context,
+                    emailController.text,
+                    senhaController.text,
                   ),
-                  child: const Text("Login com Google"),
+                  child: const Text("Entrar"),
                 ),
               ),
               Row(
@@ -116,49 +86,29 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Future<String> login() async {
-    setState(() {
-      loading = true;
-    });
+  void login(BuildContext context, String email, String senha) {
+    final vm = Provider.of<AuthViewModel>(context, listen: false);
 
-    return Future.delayed(
-      const Duration(milliseconds: 100),
-      () async {
-        var message = "";
+    final future = vm.autenticar(email, senha);
 
-        try {
-          final credential =
-              await FirebaseAuth.instance.signInWithEmailAndPassword(
-            email: emailController.text,
-            password: senhaController.text,
-          );
+    future
+        .then(
+      (value) => ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Seja bem vindo, ${value.usuarioNome}"),
+        ),
+      ),
+    )
+        .catchError(
+      (e) {
+        print(e);
 
-          message =
-              "Seja bem vindo, ${credential.user?.displayName ?? "Usuário"}";
-        } on FirebaseAuthException {
-          message = 'não foi possível completar o login';
-        }
-
-        return message;
+        return ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Não deu para fazer login: $e"),
+          ),
+        );
       },
     );
-  }
-
-  Future<UserCredential> signInWithGoogle() async {
-    // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
-
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
-
-    // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 }
